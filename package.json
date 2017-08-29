@@ -18,11 +18,12 @@
   },
   "bugs": "https://github.com/helmetjs/content-security-policy-parser/issues",
   "scripts": {
-    "test": "standard && mocha"
+    "pretest": "standard --fix",
+    "test": "mocha"
   },
   "devDependencies": {
-    "mocha": "^2.3.4",
-    "standard": "^5.4.1"
+    "mocha": "^3.5.0",
+    "standard": "^10.0.3"
   },
   "standard": {
     "globals": [
