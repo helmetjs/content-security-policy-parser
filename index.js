@@ -1,10 +1,12 @@
 module.exports = function (policy) {
   return policy.split(';').reduce(function (result, directive) {
-    var split = directive.trim().split(/\s+/g)
+    var trimmed = directive.trim()
+    if (!trimmed) { return result }
 
+    var split = directive.trim().split(/\s+/g)
     var key = split.shift()
 
-    if (key) {
+    if (!result.hasOwnProperty(key)) {
       result[key] = split
     }
 
