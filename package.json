@@ -2,7 +2,7 @@
   "name": "content-security-policy-parser",
   "author": "Evan Hahn <me@evanhahn.com> (http://evanhahn.com)",
   "description": "Parse Content Security Policy directives.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "keywords": [
     "security",
