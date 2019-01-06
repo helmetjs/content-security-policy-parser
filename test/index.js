@@ -4,27 +4,27 @@ var assert = require('assert')
 
 describe('parser', function () {
   it('parses the empty string', function () {
-    assert.deepEqual(parse(''), {})
+    assert.deepStrictEqual(parse(''), {})
   })
 
   it('parses a string that just has spaces', function () {
-    assert.deepEqual(parse('   '), {})
+    assert.deepStrictEqual(parse('   '), {})
   })
 
   it('parses a string with one empty directive', function () {
-    assert.deepEqual(parse('default-src'), {
+    assert.deepStrictEqual(parse('default-src'), {
       'default-src': []
     })
   })
 
   it('parses a string with one directive with one property', function () {
-    assert.deepEqual(parse('default-src default.com'), {
+    assert.deepStrictEqual(parse('default-src default.com'), {
       'default-src': ['default.com']
     })
   })
 
   it('parses a string with one directive with two properties', function () {
-    assert.deepEqual(parse("default-src 'self' default.com"), {
+    assert.deepStrictEqual(parse("default-src 'self' default.com"), {
       'default-src': ["'self'", 'default.com']
     })
   })
@@ -32,7 +32,7 @@ describe('parser', function () {
   it('parses a string with multiple directives', function () {
     var policy = "default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; style-src styles.biz"
 
-    assert.deepEqual(parse(policy), {
+    assert.deepStrictEqual(parse(policy), {
       'default-src': ["'self'"],
       'script-src': ["'unsafe-eval'", 'scripts.com'],
       'object-src': [],
@@ -45,15 +45,15 @@ describe('parser', function () {
       'default-src': ['default.com']
     }
 
-    assert.deepEqual(parse('default-src default.com;'), expected)
-    assert.deepEqual(parse('default-src default.com ;'), expected)
-    assert.deepEqual(parse('default-src default.com ; '), expected)
+    assert.deepStrictEqual(parse('default-src default.com;'), expected)
+    assert.deepStrictEqual(parse('default-src default.com ;'), expected)
+    assert.deepStrictEqual(parse('default-src default.com ; '), expected)
   })
 
   it('gracefully handles extra semicolons', function () {
     var policy = "default-src 'self'; script-src 'unsafe-eval' scripts.com; ; ; ;; object-src; style-src styles.biz"
 
-    assert.deepEqual(parse(policy), {
+    assert.deepStrictEqual(parse(policy), {
       'default-src': ["'self'"],
       'script-src': ["'unsafe-eval'", 'scripts.com'],
       'object-src': [],
@@ -64,7 +64,7 @@ describe('parser', function () {
   it('ignores an identical directive', function () {
     var policy = "default-src 'self'; script-src scripts.com; default-src 'none'"
 
-    assert.deepEqual(parse(policy), {
+    assert.deepStrictEqual(parse(policy), {
       'default-src': ["'self'"],
       'script-src': ['scripts.com']
     })
@@ -73,7 +73,7 @@ describe('parser', function () {
   it('ignores an identical directive, even when empty', function () {
     var policy = "default-src 'self'; script-src scripts.com"
 
-    assert.deepEqual(parse(policy), {
+    assert.deepStrictEqual(parse(policy), {
       'default-src': ["'self'"],
       'script-src': ['scripts.com']
     })
@@ -82,7 +82,7 @@ describe('parser', function () {
   it('parses a string with multiple directives with no spaces between semicolons', function () {
     var policy = "default-src 'self';script-src 'unsafe-eval' scripts.com;object-src;style-src styles.biz"
 
-    assert.deepEqual(parse(policy), {
+    assert.deepStrictEqual(parse(policy), {
       'default-src': ["'self'"],
       'script-src': ["'unsafe-eval'", 'scripts.com'],
       'object-src': [],
