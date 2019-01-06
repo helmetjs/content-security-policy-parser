@@ -8,7 +8,7 @@ Take a Content Security Policy string and parse it.
 Usage:
 
 ```javascript
-var parse = require('content-security-policy-parser')
+const parse = require('content-security-policy-parser')
 
 parse("default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; style-src styles.biz")
 /*
