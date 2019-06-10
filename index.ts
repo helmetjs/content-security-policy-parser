@@ -2,7 +2,7 @@ interface PolicyResult {
   [key: string]: string[];
 }
 
-export = function (policy: string) {
+export = function (policy: string): PolicyResult {
   return policy.split(';').reduce<PolicyResult>((result, directive) => {
     const trimmed = directive.trim();
     if (!trimmed) {

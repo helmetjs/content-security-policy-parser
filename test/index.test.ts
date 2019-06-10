@@ -69,7 +69,7 @@ describe('parser', () => {
   });
 
   it('ignores an identical directive, even when empty', () => {
-    const policy = "default-src 'self'; script-src scripts.com";
+    const policy = "default-src 'self'; script-src scripts.com; default-src";
 
     expect(parse(policy)).toStrictEqual({
       'default-src': ["'self'"],
