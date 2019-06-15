@@ -12,11 +12,18 @@
     "csp",
     "parser"
   ],
+  "homepage": "https://github.com/helmetjs/content-security-policy-parser",
   "repository": {
     "type": "git",
     "url": "git://github.com/helmetjs/content-security-policy-parser.git"
   },
-  "bugs": "https://github.com/helmetjs/content-security-policy-parser/issues",
+  "bugs": {
+    "url": "https://github.com/helmetjs/content-security-policy-parser/issues",
+    "email": "me@evanhahn.com"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "files": [
