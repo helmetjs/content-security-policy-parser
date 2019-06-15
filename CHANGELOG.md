@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 - Unreleased
+## 0.2.0 - 2019-06-15
 ### Added
 - Added TypeScript type definitions. See [#3](https://github.com/helmetjs/content-security-policy-parser/pull/3)
 
