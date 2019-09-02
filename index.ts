@@ -2,20 +2,17 @@ interface PolicyResult {
   [key: string]: string[];
 }
 
-export = function (policy: string): PolicyResult {
-  return policy.split(';').reduce<PolicyResult>((result, directive) => {
-    const trimmed = directive.trim();
-    if (!trimmed) {
+export = (policy: string): PolicyResult =>
+  policy.split(';').reduce<PolicyResult>((result, directive) => {
+    const [directiveKey, ...directiveValue] = directive.trim().split(/\s+/g);
+
+    if (!directiveKey || Object.prototype.hasOwnProperty.call(result, directiveKey)) {
       return result;
+    } else {
+      return {
+        ...result,
+        [directiveKey]: directiveValue,
+      };
     }
+  }, {})
 
-    const split = trimmed.split(/\s+/g);
-    const key = split.shift() as string;
-
-    if (!Object.prototype.hasOwnProperty.call(result, key)) {
-      result[key] = split;
-    }
-
-    return result;
-  }, {});
-}
