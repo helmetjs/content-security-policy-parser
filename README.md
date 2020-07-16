@@ -19,3 +19,5 @@ parse("default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; sty
 }
 */
 ```
+
+This module is considered "complete". I expect to continue maintenance if needed, but I don't plan to add features or make breaking changes.
