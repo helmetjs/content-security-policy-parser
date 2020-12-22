@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 - 2020-12-22
+
+### Changed
+
+- Minor performance improvement
+
 ## 0.3.0 - 2019-09-02
 
 ### Changed
