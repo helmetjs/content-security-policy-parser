@@ -7,14 +7,12 @@ export = (policy: string): PolicyResult =>
     const [directiveKey, ...directiveValue] = directive.trim().split(/\s+/g);
 
     if (
-      !directiveKey ||
-      Object.prototype.hasOwnProperty.call(result, directiveKey)
+      directiveKey &&
+      !Object.prototype.hasOwnProperty.call(result, directiveKey)
     ) {
-      return result;
-    } else {
-      return {
-        ...result,
-        [directiveKey]: directiveValue,
-      };
+      // Mutating `reduce`'s result is typically discouraged, but we do it here for performance.
+      result[directiveKey] = directiveValue;
     }
+
+    return result;
   }, {});
