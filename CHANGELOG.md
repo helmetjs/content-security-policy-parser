@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Shrink package size slightly
+
 ## 0.4.0 - 2020-12-22
 
 ### Changed
