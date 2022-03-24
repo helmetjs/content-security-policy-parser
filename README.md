@@ -1,7 +1,5 @@
 # Content Security Policy parser
 
-[![Build Status](https://travis-ci.org/helmetjs/content-security-policy-parser.svg?branch=master)](https://travis-ci.org/helmetjs/content-security-policy-parser)
-
 Take a Content Security Policy string and parse it.
 
 Usage:
