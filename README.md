@@ -8,7 +8,7 @@ Usage:
 const parse = require("content-security-policy-parser");
 
 parse(
-  "default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; style-src styles.biz"
+  "default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; style-src styles.biz",
 );
 /*
 {
