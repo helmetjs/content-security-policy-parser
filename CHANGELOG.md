@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Fix prototype pollution bug when parsing `__proto__`. See [#11](https://github.com/helmetjs/content-security-policy-parser/issues/11)
+
 ### Removed
 
 - **Breaking:** Drop support for old Node versions. Node 18+ is now required

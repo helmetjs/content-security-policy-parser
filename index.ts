@@ -7,7 +7,16 @@ export = (policy: string): PolicyResult => {
   policy.split(";").forEach((directive) => {
     const [directiveKey, ...directiveValue] = directive.trim().split(/\s+/g);
     if (directiveKey && !Object.hasOwn(result, directiveKey)) {
-      result[directiveKey] = directiveValue;
+      if (directiveKey === "__proto__") {
+        Object.defineProperty(result, directiveKey, {
+          configurable: true,
+          enumerable: true,
+          writable: true,
+          value: directiveValue,
+        });
+      } else {
+        result[directiveKey] = directiveValue;
+      }
     }
   });
   return result;

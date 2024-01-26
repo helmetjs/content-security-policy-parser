@@ -98,3 +98,18 @@ parserTest(
     "style-src": ["styles.biz"],
   },
 );
+
+test("parsing __proto__ as a directive", () => {
+  const actual = parse("default-src 'self';__proto__ foo");
+
+  const expected: Record<string, unknown> = { "default-src": ["'self'"] };
+  Object.defineProperty(expected, "__proto__", {
+    value: ["foo"],
+    configurable: true,
+    enumerable: true,
+    writable: true,
+  });
+
+  assert.deepStrictEqual(actual, expected);
+  assert.strictEqual(actual.toString(), "[object Object]");
+});
