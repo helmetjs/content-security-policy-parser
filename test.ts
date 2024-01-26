@@ -1,35 +1,38 @@
 import assert = require("node:assert/strict");
+import test from "node:test";
 import parse = require("./index");
 
-const test = (
-  message: string,
+const parserTest = (
+  testName: string,
   input: string,
   expected: Record<string, string[]>,
 ) => {
-  assert.deepStrictEqual(parse(input), expected, message);
+  test(testName, () => {
+    assert.deepStrictEqual(parse(input), expected);
+  });
 };
 
-test("parsing the empty string", "", {});
+parserTest("parsing the empty string", "", {});
 
-test("parsing a string that just has spaces", "   ", {});
+parserTest("parsing a string that just has spaces", "   ", {});
 
-test("parsing a string with one empty directive", "default-src", {
+parserTest("parsing a string with one empty directive", "default-src", {
   "default-src": [],
 });
 
-test(
+parserTest(
   "parsing a string with one directive with one property",
   "default-src default.com",
   { "default-src": ["default.com"] },
 );
 
-test(
+parserTest(
   "parsing a string with one directive with two properties",
   "default-src 'self' default.com",
   { "default-src": ["'self'", "default.com"] },
 );
 
-test(
+parserTest(
   "parsing a string with multiple directives",
   "default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; style-src styles.biz",
   {
@@ -40,23 +43,23 @@ test(
   },
 );
 
-test("trailing semicolon", "default-src default.com;", {
+parserTest("trailing semicolon", "default-src default.com;", {
   "default-src": ["default.com"],
 });
 
-test(
+parserTest(
   "trailing semicolon with whitespace before semicolon",
   "default-src default.com ;",
   { "default-src": ["default.com"] },
 );
 
-test(
+parserTest(
   "trailing semicolon with whitespace around semicolon",
   "default-src default.com ; ",
   { "default-src": ["default.com"] },
 );
 
-test(
+parserTest(
   "gracefully handles extra semicolons",
   "default-src 'self'; script-src 'unsafe-eval' scripts.com; ; ; ;; object-src; style-src styles.biz",
   {
@@ -67,7 +70,7 @@ test(
   },
 );
 
-test(
+parserTest(
   "ignores an identical directive",
   "default-src 'self'; script-src scripts.com; default-src 'none'",
   {
@@ -76,7 +79,7 @@ test(
   },
 );
 
-test(
+parserTest(
   "ignores an identical directive, even when empty",
   "default-src 'self'; script-src scripts.com; default-src",
   {
@@ -85,7 +88,7 @@ test(
   },
 );
 
-test(
+parserTest(
   "parsing a string with multiple directives with no spaces between semicolons",
   "default-src 'self';script-src 'unsafe-eval' scripts.com;object-src;style-src styles.biz",
   {
