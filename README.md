@@ -8,16 +8,15 @@ Usage:
 const parse = require("content-security-policy-parser");
 
 parse(
-  "default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; style-src styles.biz",
+  "default-src 'self'; script-src 'unsafe-eval' scripts.example; object-src; style-src styles.example",
 );
-/*
-{
-  'default-src': ["'self'"],
-  'script-src': ["'unsafe-eval'", 'scripts.com'],
-  'object-src': [],
-  'style-src': ['styles.biz']
-}
-*/
+// => Map(X) {
+//      "default-src" => ["'self'"],
+//      "script-src" => ["'unsafe-eval'", "scripts.example"],
+//      "object-src" => [],
+//      "style-src" => ["styles.example"],
+//    }
 ```
 
-This module is considered "complete". I expect to continue maintenance if needed, but I don't plan to add features or make breaking changes.
+This module is considered "complete". I expect to continue maintenance if
+needed, but I don't plan to add features or make breaking changes.

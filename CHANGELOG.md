@@ -1,10 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- **Breaking:** Parse into a `Map` instead of an object
+
 ## 0.5.0 - 2024-01-26
 
 ### Fixed
 
-- Fix prototype pollution bug when parsing `__proto__`. See [#11](https://github.com/helmetjs/content-security-policy-parser/issues/11)
+- Fix prototype pollution bug when parsing `__proto__`. See
+  [#11](https://github.com/helmetjs/content-security-policy-parser/issues/11)
 
 ### Removed
 
@@ -32,7 +39,8 @@
 
 ### Added
 
-- Added TypeScript type definitions. See [#3](https://github.com/helmetjs/content-security-policy-parser/pull/3)
+- Added TypeScript type definitions. See
+  [#3](https://github.com/helmetjs/content-security-policy-parser/pull/3)
 
 ### Changed
 

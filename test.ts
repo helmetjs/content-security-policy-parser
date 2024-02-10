@@ -1,14 +1,13 @@
-import assert = require("node:assert/strict");
-import test from "node:test";
-import parse = require("./index");
+import { assertEquals } from "https://deno.land/std@0.215.0/assert/mod.ts";
+import parse from "./mod.ts";
 
 const parserTest = (
   testName: string,
   input: string,
   expected: Record<string, string[]>,
 ) => {
-  test(testName, () => {
-    assert.deepStrictEqual(parse(input), expected);
+  Deno.test(testName, () => {
+    assertEquals(parse(input), new Map(Object.entries(expected)));
   });
 };
 
@@ -99,17 +98,13 @@ parserTest(
   },
 );
 
-test("parsing __proto__ as a directive", () => {
+Deno.test("parsing __proto__ as a directive", () => {
   const actual = parse("default-src 'self';__proto__ foo");
 
-  const expected: Record<string, unknown> = { "default-src": ["'self'"] };
-  Object.defineProperty(expected, "__proto__", {
-    value: ["foo"],
-    configurable: true,
-    enumerable: true,
-    writable: true,
-  });
+  const expected = new Map([
+    ["default-src", ["'self'"]],
+    ["__proto__", ["foo"]],
+  ]);
 
-  assert.deepStrictEqual(actual, expected);
-  assert.strictEqual(actual.toString(), "[object Object]");
+  assertEquals(actual, expected);
 });
