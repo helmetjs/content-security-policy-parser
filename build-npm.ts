@@ -6,6 +6,7 @@ await build({
   entryPoints: ["./mod.ts"],
   outDir: "./dist/npm",
   shims: { deno: "dev" },
+  typeCheck: "both",
   package: {
     name: "content-security-policy-parser",
     author: "Evan Hahn <me@evanhahn.com> (https://evanhahn.com)",
