@@ -5,12 +5,12 @@ Take a Content Security Policy string and parse it.
 Usage:
 
 ```javascript
-const parse = require("content-security-policy-parser");
+import parseContentSecurityPolicy from "content-security-policy-parser";
 
-parse(
+parseContentSecurityPolicy(
   "default-src 'self'; script-src 'unsafe-eval' scripts.example; object-src; style-src styles.example",
 );
-// => Map(X) {
+// => Map(4) {
 //      "default-src" => ["'self'"],
 //      "script-src" => ["'unsafe-eval'", "scripts.example"],
 //      "object-src" => [],
