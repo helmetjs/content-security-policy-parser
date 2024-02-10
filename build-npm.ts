@@ -11,7 +11,7 @@ await build({
     name: "content-security-policy-parser",
     author: "Evan Hahn <me@evanhahn.com> (https://evanhahn.com)",
     description: "Parse Content Security Policy directives.",
-    version: "0.5.0",
+    version: "0.6.0",
     license: "MIT",
     keywords: ["security", "content", "security", "policy", "csp", "parser"],
     homepage: "https://github.com/helmetjs/content-security-policy-parser",
