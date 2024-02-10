@@ -76,8 +76,8 @@ const testCases: Record<string, TestCase> = {
   },
 
   "vertical tabs": {
-    inputs: ["\vdefault-src default.example\v"],
-    expected: { "\vdefault-src": ["default.example\v"] },
+    inputs: ["\vdefault-src default1.example\vdefault2.example"],
+    expected: { "\vdefault-src": ["default1.example\vdefault2.example"] },
   },
 
   "__proto__": {
