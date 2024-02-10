@@ -5,6 +5,10 @@
 ### Changed
 
 - **Breaking:** Parse into a `Map` instead of an object
+- **Breaking:** Follow
+  [the CSP parser spec](https://w3c.github.io/webappsec-csp/#parse-serialized-policy)
+  more closely. See
+  [#12](https://github.com/helmetjs/content-security-policy-parser/pull/12)
 
 ## 0.5.0 - 2024-01-26
 

@@ -1,110 +1,126 @@
 import { assertEquals } from "https://deno.land/std@0.215.0/assert/mod.ts";
 import parse from "./mod.ts";
 
-const parserTest = (
-  testName: string,
-  input: string,
-  expected: Record<string, string[]>,
-) => {
-  Deno.test(testName, () => {
-    assertEquals(parse(input), new Map(Object.entries(expected)));
-  });
+type TestCase = {
+  inputs: string[];
+  expected: Map<string, string[]> | Record<string, string[]>;
 };
 
-parserTest("parsing the empty string", "", {});
+const ASCII_WHITESPACE_CHARS = ["\t", "\n", "\f", "\r", " "];
 
-parserTest("parsing a string that just has spaces", "   ", {});
+const testCases: Record<string, TestCase> = {
+  "empty/blank strings": {
+    inputs: [
+      "",
+      ...ASCII_WHITESPACE_CHARS,
+      ...ASCII_WHITESPACE_CHARS.map((c) => c.repeat(3)),
+    ],
+    expected: {},
+  },
 
-parserTest("parsing a string with one empty directive", "default-src", {
-  "default-src": [],
-});
+  "one empty directive": {
+    inputs: [
+      "default-src",
+      " default-src ",
+      "default-src;",
+      "default-src ;",
+      ";;\t;default-src;\f;;",
+    ],
+    expected: { "default-src": [] },
+  },
 
-parserTest(
-  "parsing a string with one directive with one property",
-  "default-src default.com",
-  { "default-src": ["default.com"] },
-);
+  "one directive, one value": {
+    inputs: [
+      "default-src default.example",
+      "default-src \t\ndefault.example",
+      ";default-src default.example;",
+    ],
+    expected: { "default-src": ["default.example"] },
+  },
 
-parserTest(
-  "parsing a string with one directive with two properties",
-  "default-src 'self' default.com",
-  { "default-src": ["'self'", "default.com"] },
-);
+  "one directive, two values": {
+    inputs: [
+      "default-src 'self' default.example",
+      "default-src\r'self'\tdefault.example",
+    ],
+    expected: { "default-src": ["'self'", "default.example"] },
+  },
 
-parserTest(
-  "parsing a string with multiple directives",
-  "default-src 'self'; script-src 'unsafe-eval' scripts.com; object-src; style-src styles.biz",
-  {
-    "default-src": ["'self'"],
-    "script-src": ["'unsafe-eval'", "scripts.com"],
-    "object-src": [],
-    "style-src": ["styles.biz"],
+  "multiple directives": {
+    inputs: [
+      "default-src 'self'; script-src 'unsafe-eval' scripts.example; object-src; style-src styles.example",
+      "default-src 'self';script-src 'unsafe-eval' scripts.example;object-src;style-src styles.example",
+    ],
+    expected: {
+      "default-src": ["'self'"],
+      "script-src": ["'unsafe-eval'", "scripts.example"],
+      "object-src": [],
+      "style-src": ["styles.example"],
+    },
+  },
+
+  "non-ASCII directives": {
+    inputs: [
+      "default-src default.example;\u0080;style-src style.example",
+      "default-src default.example;script-src \u0080;style-src style.example",
+      "default-src default.example;\u0080 other.example;style-src style.example",
+      // These are considered spaces by JavaScript but not by the CSP spec.
+      "default-src default.example;\ufeff;style-src style.example",
+      "default-src default.example;\u200a;style-src style.example",
+      "default-src default.example;\u3000;style-src style.example",
+    ],
+    expected: {
+      "default-src": ["default.example"],
+      "style-src": ["style.example"],
+    },
+  },
+
+  "vertical tabs": {
+    inputs: ["\vdefault-src default.example\v"],
+    expected: { "\vdefault-src": ["default.example\v"] },
+  },
+
+  "__proto__": {
+    inputs: ["default-src 'self';__proto__ foo"],
+    expected: new Map([
+      ["default-src", ["'self'"]],
+      ["__proto__", ["foo"]],
+    ]),
+  },
+
+  "downcasing directive names": {
+    inputs: [
+      "DEFAULT-SRC DEFAULT.EXAMPLE",
+      "default-SRC DEFAULT.EXAMPLE",
+      "Default-Src DEFAULT.EXAMPLE",
+    ],
+    expected: { "default-src": ["DEFAULT.EXAMPLE"] },
+  },
+
+  "duplicate directive names": {
+    inputs: [
+      "default-src default.example; script-src script.example; script-src",
+      "default-src default.example; script-src script.example; script-src script.example",
+      "default-src default.example; script-src script.example; script-src ignored.example",
+      "default-src default.example; script-src script.example; SCRIPT-SRC ignored.example",
+    ],
+    expected: {
+      "default-src": ["default.example"],
+      "script-src": ["script.example"],
+    },
+  },
+};
+
+Object.entries(testCases).forEach(
+  ([testName, { inputs, expected: rawExpected }]) => {
+    Deno.test(testName, () => {
+      const expected = rawExpected instanceof Map
+        ? rawExpected
+        : new Map(Object.entries(rawExpected));
+      for (const input of inputs) {
+        const actual = parse(input);
+        assertEquals(actual, expected, `Parsing ${input}`);
+      }
+    });
   },
 );
-
-parserTest("trailing semicolon", "default-src default.com;", {
-  "default-src": ["default.com"],
-});
-
-parserTest(
-  "trailing semicolon with whitespace before semicolon",
-  "default-src default.com ;",
-  { "default-src": ["default.com"] },
-);
-
-parserTest(
-  "trailing semicolon with whitespace around semicolon",
-  "default-src default.com ; ",
-  { "default-src": ["default.com"] },
-);
-
-parserTest(
-  "gracefully handles extra semicolons",
-  "default-src 'self'; script-src 'unsafe-eval' scripts.com; ; ; ;; object-src; style-src styles.biz",
-  {
-    "default-src": ["'self'"],
-    "script-src": ["'unsafe-eval'", "scripts.com"],
-    "object-src": [],
-    "style-src": ["styles.biz"],
-  },
-);
-
-parserTest(
-  "ignores an identical directive",
-  "default-src 'self'; script-src scripts.com; default-src 'none'",
-  {
-    "default-src": ["'self'"],
-    "script-src": ["scripts.com"],
-  },
-);
-
-parserTest(
-  "ignores an identical directive, even when empty",
-  "default-src 'self'; script-src scripts.com; default-src",
-  {
-    "default-src": ["'self'"],
-    "script-src": ["scripts.com"],
-  },
-);
-
-parserTest(
-  "parsing a string with multiple directives with no spaces between semicolons",
-  "default-src 'self';script-src 'unsafe-eval' scripts.com;object-src;style-src styles.biz",
-  {
-    "default-src": ["'self'"],
-    "script-src": ["'unsafe-eval'", "scripts.com"],
-    "object-src": [],
-    "style-src": ["styles.biz"],
-  },
-);
-
-Deno.test("parsing __proto__ as a directive", () => {
-  const actual = parse("default-src 'self';__proto__ foo");
-
-  const expected = new Map([
-    ["default-src", ["'self'"]],
-    ["__proto__", ["foo"]],
-  ]);
-
-  assertEquals(actual, expected);
-});
