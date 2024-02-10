@@ -1,6 +1,7 @@
 # Content Security Policy parser
 
-Take a Content Security Policy string and parse it.
+Take a Content Security Policy string and parse it via
+[the spec](https://w3c.github.io/webappsec-csp/#parse-serialized-policy).
 
 Usage:
 
