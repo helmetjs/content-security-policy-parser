@@ -89,6 +89,25 @@ parserTest(
 );
 
 parserTest(
+  "parse multiple valid ascii whitespace",
+  "default-src   'self'; script-src  scripts.com; default-src ",
+  {
+    "default-src": ["'self'"],
+    "script-src": ["scripts.com"],
+  },
+);
+
+parserTest(
+  "parsing directives does not split on unicode whitespace",
+  // OGHAM SPACE MARK (u1680). JS treats it as whitespace, but CSP does not.
+  "default-src 'self'; script-src scripts.com example.com",
+  {
+    "default-src": ["'self'"],
+    "script-src": ["scripts.com example.com"],
+  },
+);
+
+parserTest(
   "parsing a string with multiple directives with no spaces between semicolons",
   "default-src 'self';script-src 'unsafe-eval' scripts.com;object-src;style-src styles.biz",
   {
