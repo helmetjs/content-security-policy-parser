@@ -19,6 +19,17 @@ const ASCII = /^[\x00-\x7f]*$/;
  * [0]: https://w3c.github.io/webappsec-csp/#parse-serialized-policy
  *
  * @param policy The serialized Content Security Policy to parse.
+ * @returns A Map of Content Security Policy directives.
+ * @example
+ * parseContentSecurityPolicy(
+ *   "default-src 'self'; script-src 'unsafe-eval' scripts.example; object-src; style-src styles.example",
+ * );
+ * // => Map(4) {
+ * //      "default-src" => ["'self'"],
+ * //      "script-src" => ["'unsafe-eval'", "scripts.example"],
+ * //      "object-src" => [],
+ * //      "style-src" => ["styles.example"],
+ * //    }
  */
 export default function parseContentSecurityPolicy(
   policy: string,
