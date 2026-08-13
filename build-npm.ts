@@ -17,7 +17,7 @@ await build({
     homepage: "https://github.com/helmetjs/content-security-policy-parser",
     repository: {
       type: "git",
-      url: "git://github.com/helmetjs/content-security-policy-parser.git",
+      url: "https://github.com/helmetjs/content-security-policy-parser.git",
     },
     bugs: {
       url: "https://github.com/helmetjs/content-security-policy-parser/issues",
